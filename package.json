@@ -1,0 +1,6 @@
+{
+  "name": "pos-react-node-postgres",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": ["frontend", "backend"]
+}

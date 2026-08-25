@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:18.6-alpine
+    container_name: pos-db
+    environment:
+      POSTGRES_DB: posdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d posdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  api:
+    build: ./backend
+    container_name: pos-api
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgres://postgres:postgres@db:5432/posdb
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: pos-web
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+volumes:
+  postgres_data:
