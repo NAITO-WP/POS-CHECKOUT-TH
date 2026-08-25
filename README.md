@@ -20,7 +20,7 @@ docker compose up --build
 
 เปิดเว็บ: http://localhost:8080
 API health: http://localhost:4000/api/health
-PostgreSQL: localhost:5432 / database `posdb` / user `postgres` / password `postgres`
+PostgreSQL: 
 
 หยุด:
 ```bash
